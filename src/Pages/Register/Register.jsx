@@ -1,12 +1,13 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
+  const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const { register, reset, handleSubmit } = useForm();
 
@@ -32,6 +33,7 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 1500
               });
+              navigate("/login");
             }
           });
         });

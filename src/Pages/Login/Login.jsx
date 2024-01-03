@@ -1,17 +1,23 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
+  const { signInUser } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
+    signInUser(data.email, data.password)
+    .then(res => {
+      console.log(res);
+      navigate("/");
+    })
   };
 
   return (
@@ -30,14 +36,6 @@ const Login = () => {
           <h2 className="text-3xl font-bold">Login Here</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
-              <label>First Name</label>
-              <input
-                className="w-full input border p-2 rounded-xl"
-                placeholder="Enter your name"
-                {...register("name")}
-              />
-            </div>
-            <div className="form-control">
               <label>Email</label>
               <input
                 className="w-full input border p-2 rounded-xl"
@@ -51,14 +49,6 @@ const Login = () => {
                 className="w-full input border p-2 rounded-xl"
                 placeholder="Enter password"
                 {...register("password")}
-              />
-            </div>
-            <div className="form-control">
-              <label>Photo</label>
-              <input
-                className="w-full input border p-2 rounded-xl"
-                placeholder="Enter photo URL"
-                {...register("photo")}
               />
             </div>
             <div className="form-control mt-4">
