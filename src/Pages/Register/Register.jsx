@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const { register, reset, handleSubmit } = useForm();
@@ -24,14 +27,14 @@ const Register = () => {
 
           axiosPublic.post("/users", userInfo).then((res) => {
             console.log(res.data);
-            if(res.data.insertedId) {
+            if (res.data.insertedId) {
               reset();
               Swal.fire({
                 position: "top-end",
                 icon: "success",
                 title: "User created successfully",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
               });
               navigate("/login");
             }
@@ -63,6 +66,7 @@ const Register = () => {
             <input
               className="w-full input border p-2 rounded-xl"
               placeholder="Enter your name"
+              type="text"
               {...register("name")}
             />
           </div>
@@ -71,16 +75,21 @@ const Register = () => {
             <input
               className="w-full input border p-2 rounded-xl"
               placeholder="Enter your email"
+              type="email"
               {...register("email")}
             />
           </div>
           <div className="form-control mb-2">
             <label>Password</label>
-            <input
-              className="w-full input border p-2 rounded-xl"
-              placeholder="Enter password"
-              {...register("password")}
-            />
+            <div className="relative">
+              <input
+                className="w-full input border p-2 rounded-xl"
+                placeholder="Enter password"
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+              />
+              <span onClick={() => setShowPassword(!showPassword)} className="absolute top-3 right-5">{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
+            </div>
           </div>
           <div className="form-control mb-2">
             <label>Photo</label>
